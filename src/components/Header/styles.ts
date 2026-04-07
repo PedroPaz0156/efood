@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import fundo from '../../assets/images/fundo.png'
+import { Cores } from '../../styles'
 
 export const HeaderBox = styled.header`
   background-image: url(${fundo});
@@ -15,8 +16,6 @@ export const NavBar = styled.ul`
   align-items: center;
   font-size: 18px;
   font-weight: bold;
-  text-decoration: none;
-  color: inherit;
 
   img {
     width: 124px;

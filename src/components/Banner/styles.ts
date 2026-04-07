@@ -1,18 +1,22 @@
 import styled from 'styled-components'
+import { Cores } from '../../styles'
 
 export const Fundo = styled.div`
   width: 100%;
   height: 280px;
   background-size: cover;
   background-repeat: no-repeat;
+  color: ${Cores.bege};
   font-size: 32px;
+  display: flex;
   position: relative;
 
   .container {
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: flex-end;
+    padding: 8px 0px;
     z-index: 1;
   }
 

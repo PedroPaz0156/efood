@@ -3,21 +3,21 @@ import Prato from '../Prato'
 import { ListaPratos } from './styles'
 
 type Props = {
-  cardapio: RestauranteInfos[]
+  restaurante: RestauranteInfos
 }
 
-const PratoLista = ({ cardapio }: Props) => (
+const PratoLista = ({ restaurante }: Props) => (
   <div className="container">
     <ListaPratos>
-      {cardapio.map((restaurante) => (
-        <li key={restaurante.cardapio.id}>
+      {restaurante.cardapio.map((cardapio) => (
+        <li key={cardapio.id}>
           <Prato
-            id={restaurante.cardapio.id}
-            nome={restaurante.cardapio.nome}
-            descricao={restaurante.cardapio.descricao}
-            foto={restaurante.cardapio.foto}
-            porcao={restaurante.cardapio.porcao}
-            preco={restaurante.cardapio.preco}
+            id={cardapio.id}
+            nome={cardapio.nome}
+            descricao={cardapio.descricao}
+            foto={cardapio.foto}
+            porcao={cardapio.porcao}
+            preco={cardapio.preco}
           />
         </li>
       ))}

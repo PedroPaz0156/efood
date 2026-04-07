@@ -5,6 +5,7 @@ import { Cores } from '../../styles'
 export const BotaoAction = styled.button`
   background-color: ${Cores.bege};
   color: ${Cores.vermelho};
+  border: none;
   font-size: 14px;
   font-weight: bold;
   padding: 8px;

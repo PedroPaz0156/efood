@@ -10,15 +10,25 @@ type Props = {
   preco: number
 }
 
-const Prato = ({ id, nome, descricao, foto, porcao, preco }: Props) => (
-  <PratoCard>
-    <img src={foto} />
-    <div>
-      <h3>{nome}</h3>
-      <p>{descricao}</p>
+const Prato = ({ id, nome, descricao, foto, porcao, preco }: Props) => {
+  const getDescricao = (descricao: string) => {
+    if (descricao.length > 190) {
+      return descricao.slice(0, 187) + '...'
+    }
+
+    return descricao
+  }
+
+  return (
+    <PratoCard>
+      <img src={foto} />
+      <div>
+        <h3>{nome}</h3>
+        <p>{getDescricao(descricao)}</p>
+      </div>
       <Botao tipo={'botao'}>Adicionar ao carrinho</Botao>
-    </div>
-  </PratoCard>
-)
+    </PratoCard>
+  )
+}
 
 export default Prato

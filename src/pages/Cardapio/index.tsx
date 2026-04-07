@@ -9,13 +9,6 @@ const Cardapio = () => {
   const { id } = useParams()
 
   const [restaurante, setRestaurante] = useState<RestauranteInfos>()
-  const [cardapio, setCardapio] = useState<RestauranteInfos[]>([])
-
-  useEffect(() => {
-    fetch(`https://api-ebac.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((res) => setCardapio(res))
-  }, [id])
 
   useEffect(() => {
     fetch(`https://api-ebac.vercel.app/api/efood/restaurantes/${id}`)
@@ -24,9 +17,6 @@ const Cardapio = () => {
   }, [id])
 
   if (!restaurante) {
-    return <h1>Carregando...</h1>
-  }
-  if (!cardapio) {
     return <h1>Carregando...</h1>
   }
 
@@ -38,7 +28,7 @@ const Cardapio = () => {
         nome={restaurante.titulo}
         capa={restaurante.capa}
       />
-      <PratoLista cardapio={cardapio} />
+      <PratoLista restaurante={restaurante} />
     </>
   )
 }

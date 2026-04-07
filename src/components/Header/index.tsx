@@ -4,9 +4,11 @@ import { HeaderBox, NavBar } from './styles'
 
 const Header = () => (
   <HeaderBox>
-    <NavBar>
+    <NavBar className="container">
       <li>
-        <Link to="/">Restaurantes</Link>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          Restaurantes
+        </Link>
       </li>
       <li>
         <Link to="/">

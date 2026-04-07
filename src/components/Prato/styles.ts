@@ -8,6 +8,12 @@ export const PratoCard = styled.div`
   color: ${Cores.bege};
   padding: 8px;
 
+  img {
+    object-fit: cover;
+    width: 100%;
+    height: 160px;
+  }
+
   h3 {
     font-size: 16px;
   }
