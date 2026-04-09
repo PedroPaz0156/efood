@@ -23,6 +23,7 @@ const Restaurante = ({
 }: Props) => (
   <RestauranteCard>
     <img src={capa} />
+    {destacado ? <Tag>{destacado}</Tag> : <></>}
     <Tag>{tipo}</Tag>
     <div>
       <Cabecalho>

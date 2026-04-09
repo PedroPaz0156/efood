@@ -23,7 +23,7 @@ const formataPreco = (preco = 0) => {
   }).format(preco)
 }
 
-const Prato = ({ id, nome, descricao, foto, porcao, preco }: Props) => {
+const Prato = ({ nome, descricao, foto, porcao, preco }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     isVisible: false
   })

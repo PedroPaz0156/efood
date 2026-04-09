@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 import fundo from '../../assets/images/fundo.png'
-import { Cores } from '../../styles'
 
 export const HeaderBox = styled.header`
   background-image: url(${fundo});
