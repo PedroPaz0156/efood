@@ -1,5 +1,7 @@
 import Botao from '../Botao'
-import { PratoCard } from './styles'
+import fechar from '../../assets/images/close 1.png'
+import { FotoModal, Modal, ModalCard, ModalConteudo, PratoCard } from './styles'
+import { useState } from 'react'
 
 type Props = {
   id: number
@@ -10,7 +12,22 @@ type Props = {
   preco: number
 }
 
+interface ModalState {
+  isVisible: boolean
+}
+
+const formataPreco = (preco = 0) => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(preco)
+}
+
 const Prato = ({ id, nome, descricao, foto, porcao, preco }: Props) => {
+  const [modal, setModal] = useState<ModalState>({
+    isVisible: false
+  })
+
   const getDescricao = (descricao: string) => {
     if (descricao.length > 190) {
       return descricao.slice(0, 187) + '...'
@@ -19,15 +36,50 @@ const Prato = ({ id, nome, descricao, foto, porcao, preco }: Props) => {
     return descricao
   }
 
+  const openModal = () => {
+    setModal({
+      isVisible: true
+    })
+  }
+
+  const closeModal = () => {
+    setModal({
+      isVisible: false
+    })
+  }
+
   return (
-    <PratoCard>
-      <img src={foto} />
-      <div>
-        <h3>{nome}</h3>
-        <p>{getDescricao(descricao)}</p>
-      </div>
-      <Botao tipo={'botao'}>Adicionar ao carrinho</Botao>
-    </PratoCard>
+    <>
+      <PratoCard>
+        <img src={foto} />
+        <div>
+          <h3>{nome}</h3>
+          <p>{getDescricao(descricao)}</p>
+        </div>
+        <Botao tipo={'botao'} onClick={() => openModal()}>
+          Adicionar ao carrinho
+        </Botao>
+      </PratoCard>
+      <Modal className={modal.isVisible ? 'visible' : ''}>
+        <ModalCard className="container">
+          <Botao tipo={'botao'} onClick={() => closeModal()}>
+            <img src={fechar} />
+          </Botao>
+          <ModalConteudo>
+            <FotoModal src={foto} />
+            <div>
+              <h4>{nome}</h4>
+              <p>{descricao}</p>
+              <p> Serve de: {porcao}</p>
+              <Botao tipo="botao">
+                Adicionar ao carrinho - {formataPreco(preco)}
+              </Botao>
+            </div>
+          </ModalConteudo>
+        </ModalCard>
+        <div className="overlay"></div>
+      </Modal>
+    </>
   )
 }
 

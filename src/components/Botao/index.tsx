@@ -1,10 +1,11 @@
+import { JSX } from 'react'
 import { BotaoAction, BotaoLink } from './styles'
 
 type Props = {
   tipo: 'botao' | 'link'
   to?: string
   onClick?: () => void
-  children?: string
+  children?: string | string[] | JSX.Element
 }
 
 const Botao = ({ tipo, children, to, onClick }: Props) => {
