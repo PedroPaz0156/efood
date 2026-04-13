@@ -8,9 +8,14 @@ export const PratoCard = styled.div`
   background-color: ${Cores.vermelho};
   color: ${Cores.bege};
   padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   img {
     object-fit: cover;
+    border-radius: 8px;
     width: 100%;
     height: 160px;
   }
@@ -54,7 +59,6 @@ export const ModalCard = styled.div`
   max-width: 960px;
   background-color: ${Cores.vermelho};
   color: ${Cores.branco};
-  padding-bottom: 16px;
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -72,12 +76,13 @@ export const ModalCard = styled.div`
   }
 
   div {
-    margin-left: 8px;
+    margin: 0 32px 32px 32px;
   }
 
   > ${BotaoAction} {
+    max-height: 32px;
     background-color: ${Cores.vermelho};
-    margin: 0;
+    padding: 8px;
   }
 `
 
@@ -91,7 +96,7 @@ export const ModalConteudo = styled.div`
   }
 
   div {
-    margin: 8px;
+    margin: 0px 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

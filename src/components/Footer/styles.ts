@@ -5,7 +5,6 @@ export const FooterBox = styled.footer`
   background-color: ${Cores.salmao};
 
   div {
-    margin: 40px 0px;
     padding: 40px 0;
     display: flex;
     flex-direction: column;

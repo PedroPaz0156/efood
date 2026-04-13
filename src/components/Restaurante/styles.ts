@@ -7,6 +7,9 @@ export const RestauranteCard = styled.div`
   border: 2px solid ${Cores.vermelho};
   width: 480px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   img {
     object-fit: cover;

@@ -14,7 +14,8 @@ export const BotaoAction = styled.button`
 
 export const BotaoLink = styled(Link)`
   text-decoration: none;
-  display: inline-block;
+  max-width: 88px;
+  display: block;
   background-color: ${Cores.vermelho};
   color: ${Cores.bege};
   font-size: 14px;

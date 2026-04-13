@@ -33,10 +33,10 @@ const Restaurante = ({
         </span>
       </Cabecalho>
       <Descricao>{descricao}</Descricao>
-      <Botao tipo={'link'} to={`/restaurantes/${id}`}>
-        Saiba mais
-      </Botao>
     </div>
+    <Botao tipo={'link'} to={`/restaurantes/${id}`}>
+      Saiba mais
+    </Botao>
   </RestauranteCard>
 )
 
