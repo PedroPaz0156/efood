@@ -7,9 +7,12 @@ export const Fundo = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   color: ${Cores.bege};
-  font-size: 32px;
   display: flex;
   position: relative;
+
+  h2 {
+    font-size: 32px;
+  }
 
   .container {
     position: relative;

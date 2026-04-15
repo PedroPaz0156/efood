@@ -27,11 +27,14 @@ export const RestauranteCard = styled.div`
 `
 
 export const Cabecalho = styled.div`
-  font-size: 18px;
-  font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  h2 {
+    font-size: 18px;
+    font-weight: bold;
+  }
 
   img {
     width: 20px;
