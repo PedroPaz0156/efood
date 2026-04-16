@@ -12,12 +12,14 @@ const PratoLista = ({ restaurante }: Props) => (
       {restaurante.cardapio.map((cardapio) => (
         <li key={cardapio.id}>
           <Prato
-            id={cardapio.id}
-            nome={cardapio.nome}
-            descricao={cardapio.descricao}
-            foto={cardapio.foto}
-            porcao={cardapio.porcao}
-            preco={cardapio.preco}
+            prato={{
+              foto: cardapio.foto,
+              preco: cardapio.preco,
+              id: cardapio.id,
+              nome: cardapio.nome,
+              descricao: cardapio.descricao,
+              porcao: cardapio.porcao
+            }}
           />
         </li>
       ))}

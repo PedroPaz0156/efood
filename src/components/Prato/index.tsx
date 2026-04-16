@@ -2,28 +2,26 @@ import Botao from '../Botao'
 import fechar from '../../assets/images/close 1.png'
 import { FotoModal, Modal, ModalCard, ModalConteudo, PratoCard } from './styles'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { abrir, adicionar } from '../../store/reducers/carrinho'
+import { Cardapio } from '../../pages/Home'
 
 type Props = {
-  id: number
-  nome: string
-  descricao: string
-  foto: string
-  porcao: string
-  preco: number
+  prato: Cardapio
 }
 
 interface ModalState {
   isVisible: boolean
 }
 
-const formataPreco = (preco = 0) => {
+export const formataPreco = (preco = 0) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(preco)
 }
 
-const Prato = ({ nome, descricao, foto, porcao, preco }: Props) => {
+const Prato = ({ prato }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     isVisible: false
   })
@@ -48,13 +46,21 @@ const Prato = ({ nome, descricao, foto, porcao, preco }: Props) => {
     })
   }
 
+  const dispatch = useDispatch()
+
+  const adicionarAoCarrinho = () => {
+    dispatch(adicionar(prato))
+    closeModal
+    dispatch(abrir())
+  }
+
   return (
     <>
       <PratoCard>
-        <img src={foto} />
+        <img src={prato.foto} />
         <div>
-          <h3>{nome}</h3>
-          <p>{getDescricao(descricao)}</p>
+          <h3>{prato.nome}</h3>
+          <p>{getDescricao(prato.descricao)}</p>
         </div>
         <Botao tipo={'botao'} onClick={() => openModal()}>
           Adicionar ao carrinho
@@ -66,13 +72,13 @@ const Prato = ({ nome, descricao, foto, porcao, preco }: Props) => {
             <img src={fechar} />
           </Botao>
           <ModalConteudo>
-            <FotoModal src={foto} />
+            <FotoModal src={prato.foto} />
             <div>
-              <h4>{nome}</h4>
-              <p>{descricao}</p>
-              <p> Serve de: {porcao}</p>
-              <Botao tipo="botao">
-                Adicionar ao carrinho - {formataPreco(preco)}
+              <h4>{prato.nome}</h4>
+              <p>{prato.descricao}</p>
+              <p> Serve de: {prato.porcao}</p>
+              <Botao tipo="botao" onClick={adicionarAoCarrinho}>
+                Adicionar ao carrinho - {formataPreco(prato.preco)}
               </Botao>
             </div>
           </ModalConteudo>

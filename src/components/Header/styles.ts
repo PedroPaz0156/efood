@@ -21,3 +21,9 @@ export const NavBar = styled.ul`
     height: 56px;
   }
 `
+
+export const CarrinhoText = styled.a`
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+`
