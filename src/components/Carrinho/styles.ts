@@ -32,7 +32,7 @@ export const CarrinhoContainer = styled.div`
 
 export const Precos = styled.div`
   color: ${Cores.bege};
-  padding: 40px 8px 16px;
+  padding: 24px 8px 16px;
   font-weight: bold;
   font-size: 14px;
   display: flex;
@@ -58,6 +58,7 @@ export const CarrinhoItem = styled.li`
   color: ${Cores.vermelho};
   padding: 8px;
   position: relative;
+  margin-bottom: 16px;
 
   img {
     height: 80px;

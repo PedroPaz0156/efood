@@ -50,7 +50,7 @@ const Prato = ({ prato }: Props) => {
 
   const adicionarAoCarrinho = () => {
     dispatch(adicionar(prato))
-    closeModal
+    closeModal()
     dispatch(abrir())
   }
 

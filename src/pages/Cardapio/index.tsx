@@ -3,6 +3,7 @@ import Banner from '../../components/Banner'
 import Header from '../../components/Header'
 import PratoLista from '../../components/PratoLista'
 import { useGetCardapioQuery } from '../../services/api'
+import Carrinho from '../../components/Carrinho'
 
 const Cardapio = () => {
   const { id } = useParams()
@@ -21,6 +22,7 @@ const Cardapio = () => {
         capa={restaurante.capa}
       />
       <PratoLista restaurante={restaurante} />
+      <Carrinho />
     </>
   )
 }
