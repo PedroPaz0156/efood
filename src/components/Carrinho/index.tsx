@@ -3,12 +3,10 @@ import Botao from '../Botao'
 import * as S from './styles'
 import { RootReducer } from '../../store'
 import { fechar, remover } from '../../store/reducers/carrinho'
-import { usePurchaseMutation } from '../../services/api'
 import { formataPreco, getPrecoTotal } from '../../utils'
 
 const Carrinho = () => {
   const { isOpen, pratos } = useSelector((state: RootReducer) => state.carrinho)
-  const [compra, { data }] = usePurchaseMutation()
 
   const dispatch = useDispatch()
 
