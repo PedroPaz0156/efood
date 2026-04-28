@@ -1,4 +1,3 @@
-import { RestauranteInfos } from '../../pages/Home'
 import Restaurante from '../Restaurante'
 import { Lista } from './styles'
 

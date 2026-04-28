@@ -4,7 +4,7 @@ import { FotoModal, Modal, ModalCard, ModalConteudo, PratoCard } from './styles'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { abrir, adicionar } from '../../store/reducers/carrinho'
-import { Cardapio } from '../../pages/Home'
+import { formataPreco } from '../../utils'
 
 type Props = {
   prato: Cardapio
@@ -12,13 +12,6 @@ type Props = {
 
 interface ModalState {
   isVisible: boolean
-}
-
-export const formataPreco = (preco = 0) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(preco)
 }
 
 const Prato = ({ prato }: Props) => {

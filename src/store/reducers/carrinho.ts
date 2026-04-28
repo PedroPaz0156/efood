@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Cardapio } from '../../pages/Home'
 
 type CarrinhoState = {
   pratos: Cardapio[]
@@ -32,9 +31,13 @@ const carrinhoSlice = createSlice({
     },
     fechar: (state) => {
       state.isOpen = false
+    },
+    limpar: (state) => {
+      state.pratos = []
     }
   }
 })
 
-export const { abrir, adicionar, fechar, remover } = carrinhoSlice.actions
+export const { abrir, adicionar, fechar, remover, limpar } =
+  carrinhoSlice.actions
 export default carrinhoSlice.reducer

@@ -15,7 +15,7 @@ export const Overlay = styled.div`
   opacity: 0.7;
 `
 
-export const CarrinhoContainer = styled.div`
+export const SideContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
@@ -49,6 +49,11 @@ export const Sidebar = styled.aside`
   ${BotaoAction} {
     max-width: 100%;
     width: 100%;
+  }
+
+  > h3 {
+    font-size: 16px;
+    font-weight: bold;
   }
 `
 
@@ -87,5 +92,22 @@ export const CarrinhoItem = styled.li`
     position: absolute;
     bottom: 8px;
     right: 0;
+  }
+`
+
+export const InputRow = styled.div`
+  flex: auto;
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    color: ${Cores.bege};
+    margin-bottom: 8px;
+  }
+
+  input {
+    background-color: ${Cores.bege};
+    height: 32px;
+    margin-bottom: 8px;
   }
 `

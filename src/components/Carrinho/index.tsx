@@ -1,18 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
 import Botao from '../Botao'
-import {
-  CarrinhoContainer,
-  CarrinhoItem,
-  Overlay,
-  Precos,
-  Sidebar
-} from './styles'
+import * as S from './styles'
 import { RootReducer } from '../../store'
 import { fechar, remover } from '../../store/reducers/carrinho'
-import { formataPreco } from '../Prato'
+import { usePurchaseMutation } from '../../services/api'
+import { formataPreco, getPrecoTotal } from '../../utils'
 
 const Carrinho = () => {
   const { isOpen, pratos } = useSelector((state: RootReducer) => state.carrinho)
+  const [compra, { data }] = usePurchaseMutation()
 
   const dispatch = useDispatch()
 
@@ -24,35 +20,29 @@ const Carrinho = () => {
     dispatch(remover(id))
   }
 
-  const calcularPrecoTotal = () => {
-    return pratos.reduce((acumulador, valorAtual) => {
-      return (acumulador += valorAtual.preco!)
-    }, 0)
-  }
-
   return (
-    <CarrinhoContainer className={isOpen ? 'is-open' : ''}>
-      <Overlay onClick={fecharCarrinho} />
-      <Sidebar>
+    <S.SideContainer className={isOpen ? 'is-open' : ''}>
+      <S.Overlay onClick={fecharCarrinho} />
+      <S.Sidebar>
         <ul>
           {pratos.map((item) => (
-            <CarrinhoItem key={item.id}>
+            <S.CarrinhoItem key={item.id}>
               <img src={item.foto} alt={item.nome} />
               <div>
                 <h3>{item.nome}</h3>
                 <span>{formataPreco(item.preco)}</span>
               </div>
               <button type="button" onClick={() => removerItem(item.id)} />
-            </CarrinhoItem>
+            </S.CarrinhoItem>
           ))}
         </ul>
-        <Precos>
+        <S.Precos>
           <p>Valor Total:</p>
-          <span>{formataPreco(calcularPrecoTotal())}</span>
-        </Precos>
+          <span>{formataPreco(getPrecoTotal(pratos))}</span>
+        </S.Precos>
         <Botao tipo={'botao'}>Continuar com a entrega</Botao>
-      </Sidebar>
-    </CarrinhoContainer>
+      </S.Sidebar>
+    </S.SideContainer>
   )
 }
 
