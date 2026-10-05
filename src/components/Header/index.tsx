@@ -3,14 +3,14 @@ import logo from '../../assets/images/logo.png'
 import { CarrinhoText, HeaderBox, NavBar } from './styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { abrir } from '../../store/reducers/carrinho'
+import { abrirCarrinho } from '../../store/reducers/carrinho'
 
 const Header = () => {
   const dispatch = useDispatch()
   const { pratos } = useSelector((state: RootReducer) => state.carrinho)
 
-  const abrirCarrinho = () => {
-    dispatch(abrir())
+  const abrirCarrinhoCarrinho = () => {
+    dispatch(abrirCarrinho())
   }
 
   return (
@@ -27,7 +27,7 @@ const Header = () => {
           </Link>
         </li>
         <li>
-          <CarrinhoText onClick={abrirCarrinho}>
+          <CarrinhoText onClick={abrirCarrinhoCarrinho}>
             {pratos.length} produto(s) no carrinho
           </CarrinhoText>
         </li>

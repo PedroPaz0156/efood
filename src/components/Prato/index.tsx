@@ -3,7 +3,7 @@ import fechar from '../../assets/images/close 1.png'
 import { FotoModal, Modal, ModalCard, ModalConteudo, PratoCard } from './styles'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { abrir, adicionar } from '../../store/reducers/carrinho'
+import { abrirCarrinho, adicionar } from '../../store/reducers/carrinho'
 import { formataPreco } from '../../utils'
 
 type Props = {
@@ -44,7 +44,7 @@ const Prato = ({ prato }: Props) => {
   const adicionarAoCarrinho = () => {
     dispatch(adicionar(prato))
     closeModal()
-    dispatch(abrir())
+    dispatch(abrirCarrinho())
   }
 
   return (

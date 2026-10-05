@@ -10,6 +10,7 @@ export const BotaoAction = styled.button`
   font-weight: bold;
   padding: 8px;
   display: block;
+  cursor: pointer;
 `
 
 export const BotaoLink = styled(Link)`
@@ -21,4 +22,5 @@ export const BotaoLink = styled(Link)`
   font-size: 14px;
   font-weight: bold;
   padding: 8px;
+  cursor: pointer;
 `

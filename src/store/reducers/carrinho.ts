@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 type CarrinhoState = {
   pratos: Cardapio[]
   isOpen: boolean
+  checkout: boolean
 }
 
 const initialState: CarrinhoState = {
   pratos: [],
-  isOpen: false
+  isOpen: false,
+  checkout: false
 }
 
 const carrinhoSlice = createSlice({
@@ -26,10 +28,14 @@ const carrinhoSlice = createSlice({
     remover: (state, action: PayloadAction<number>) => {
       state.pratos = state.pratos.filter((item) => item.id !== action.payload)
     },
-    abrir: (state) => {
+    abrirCarrinho: (state) => {
       state.isOpen = true
     },
+    abrirCheckout: (state) => {
+      state.checkout = true
+    },
     fechar: (state) => {
+      state.checkout = false
       state.isOpen = false
     },
     limpar: (state) => {
@@ -38,6 +44,12 @@ const carrinhoSlice = createSlice({
   }
 })
 
-export const { abrir, adicionar, fechar, remover, limpar } =
-  carrinhoSlice.actions
+export const {
+  abrirCarrinho,
+  abrirCheckout,
+  adicionar,
+  fechar,
+  remover,
+  limpar
+} = carrinhoSlice.actions
 export default carrinhoSlice.reducer
