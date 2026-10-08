@@ -6,17 +6,18 @@ import * as Yup from 'yup'
 
 import Botao from '../Botao'
 
-import * as S from '../Carrinho/styles'
+import * as S from '../Checkout/styles'
 
 import { usePurchaseMutation } from '../../services/api'
 
 import { formataPreco, getPrecoTotal } from '../../utils'
-import { limpar } from '../../store/reducers/carrinho'
+import { limpar, fecharCheckout, fechar } from '../../store/reducers/carrinho'
 
 const Checkout = () => {
   const [pagamento, setPagamento] = useState(false)
+  const [state, setState] = useState('delivery')
   const { checkout } = useSelector((state: RootReducer) => state.carrinho)
-  const [purchase, { data, isSuccess }] = usePurchaseMutation()
+  const [purchase, { data: PurchaseData, isSuccess }] = usePurchaseMutation()
   const { pratos } = useSelector((state: RootReducer) => state.carrinho)
   const dispatch = useDispatch()
   const precoTotal = getPrecoTotal(pratos)
@@ -121,117 +122,186 @@ const Checkout = () => {
   }, [isSuccess, dispatch])
 
   return (
-    <S.CheckoutSideContainer className={checkout ? 'proceed' : ''}>
-      <S.Sidebar>
-        <h3>Entrega</h3>
-        <S.InputRow>
-          <label htmlFor="nome">Quem irá receber</label>
-          <input
-            type="text"
-            id="nome"
-            name="nome"
-            value={form.values.delivery.receiver}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="endereco">Endereço</label>
-          <input
-            type="text"
-            id="endereco"
-            name="endereco"
-            value={form.values.delivery.address.description}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="cidade">Cidade</label>
-          <input
-            type="text"
-            name="cidade"
-            id="cidade"
-            value={form.values.delivery.address.city}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="cep">CEP</label>
-          <input
-            type="text"
-            name="cep"
-            id="cep"
-            value={form.values.delivery.address.zipCode}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-          <label htmlFor="numero">Número</label>
-          <input
-            type="text"
-            name="numero"
-            id="numero"
-            value={form.values.delivery.address.number}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="complemento">Complemento(Opcional)</label>
-          <input
-            type="text"
-            name="complemento"
-            id="complemento"
-            value={form.values.delivery.address.complement}
-            onChange={form.handleChange}
-            onBlur={form.handleBlur}
-          />
-        </S.InputRow>
-        <Botao tipo={'botao'}>Continuar com o pagamento</Botao>
-        <Botao tipo={'botao'}>Voltar para o carrinho</Botao>
-      </S.Sidebar>
-      <S.Sidebar>
-        <h3>Pagamento - valor a pagar {formataPreco(precoTotal)}</h3>
-        <S.InputRow>
-          <label htmlFor="nomeCartao">Nome no cartão</label>
-          <input type="text" name="nomeCartao" id="nomeCartao" />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="numeroCartao">Número do cartão</label>
-          <input type="text" name="numeroCartao" id="numeroCartao" />
-          <label htmlFor="cvv">CVV</label>
-          <input type="text" name="cvv" id="cvv" />
-        </S.InputRow>
-        <S.InputRow>
-          <label htmlFor="mesVencimento">Mês de vencimento</label>
-          <input type="text" id="mesVencimento" name="mesVencimento" />
-          <label htmlFor="anoVencimento">Ano de vencimento</label>
-          <input type="text" name="anoVencimento" id="anoVencimento" />
-        </S.InputRow>
-        <Botao tipo="botao">Finalizar pagamento</Botao>
-        <Botao tipo="botao">Voltar para a edição de endereço</Botao>
-      </S.Sidebar>
-      <S.Sidebar>
-        <h3>Pedido realizado - {data!.orderId}</h3>
-        <p>
-          Estamos felizes em informar que seu pedido já está em processo de
-          preparação e, em breve, será entregue no endereço fornecido.
-        </p>
-        <p>
-          Gostaríamos de ressaltar que nossos entregadores não estão autorizados
-          a realizar cobranças extras.{' '}
-        </p>
-        <p>
-          Lembre-se da importância de higienizar as mãos após o recebimento do
-          pedido, garantindo assim sua segurança e bem-estar durante a refeição.
-        </p>
-        <p>
-          Esperamos que desfrute de uma deliciosa e agradável experiência
-          gastronômica. Bom apetite!
-        </p>
-      </S.Sidebar>
-    </S.CheckoutSideContainer>
+    <form onSubmit={form.handleSubmit}>
+      <S.CheckoutSideContainer
+        className={checkout && state === 'delivery' ? 'delivery' : ''}
+      >
+        <S.Sidebar>
+          <h3>Entrega</h3>
+          <S.InputRow>
+            <label htmlFor="nome">Quem irá receber</label>
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              value={form.values.delivery.receiver}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
+          </S.InputRow>
+          <S.InputRow>
+            <label htmlFor="endereco">Endereço</label>
+            <input
+              type="text"
+              id="endereco"
+              name="endereco"
+              value={form.values.delivery.address.description}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
+          </S.InputRow>
+          <S.InputRow>
+            <label htmlFor="cidade">Cidade</label>
+            <input
+              type="text"
+              name="cidade"
+              id="cidade"
+              value={form.values.delivery.address.city}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
+          </S.InputRow>
+          <S.MicroInputRow>
+            <div>
+              <label htmlFor="cep">CEP</label>
+              <input
+                type="text"
+                name="cep"
+                id="cep"
+                value={form.values.delivery.address.zipCode}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+            <div>
+              <label htmlFor="numero">Número</label>
+              <input
+                type="text"
+                name="numero"
+                id="numero"
+                value={form.values.delivery.address.number}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
+              />
+            </div>
+          </S.MicroInputRow>
+          <S.InputRow>
+            <label htmlFor="complemento">Complemento(Opcional)</label>
+            <input
+              type="text"
+              name="complemento"
+              id="complemento"
+              value={form.values.delivery.address.complement}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+            />
+          </S.InputRow>
+          <Botao tipo={'botao'} onClick={() => setState('payment')}>
+            Continuar com o pagamento
+          </Botao>
+          <Botao tipo={'botao'} onClick={() => dispatch(fecharCheckout())}>
+            Voltar para o carrinho
+          </Botao>
+        </S.Sidebar>
+      </S.CheckoutSideContainer>
+      <S.CheckoutSideContainer
+        className={checkout && state === 'payment' ? 'payment' : ''}
+      >
+        <S.Sidebar>
+          <h3>Pagamento - valor a pagar {formataPreco(precoTotal)}</h3>
+          <S.InputRow>
+            <label htmlFor="nomeCartao">Nome no cartão</label>
+            <input type="text" name="nomeCartao" id="nomeCartao" />
+          </S.InputRow>
+          <S.MicroInputRow>
+            <div>
+              <label htmlFor="numeroCartao">Número do cartão</label>
+              <input
+                type="text"
+                name="numeroCartao"
+                id="numeroCartao"
+                style={{ width: '232px' }}
+              />
+            </div>
+            <div>
+              <label htmlFor="cvv">CVV</label>
+              <input
+                type="text"
+                name="cvv"
+                id="cvv"
+                style={{ width: '88px' }}
+              />
+            </div>
+          </S.MicroInputRow>
+          <S.MicroInputRow>
+            <div>
+              <label htmlFor="mesVencimento">Mês de vencimento</label>
+              <input
+                type="text"
+                id="mesVencimento"
+                name="mesVencimento"
+                style={{ width: '156px' }}
+              />
+            </div>
+            <div>
+              <label htmlFor="anoVencimento">Ano de vencimento</label>
+              <input
+                type="text"
+                name="anoVencimento"
+                id="anoVencimento"
+                style={{ width: '156px' }}
+              />
+            </div>
+          </S.MicroInputRow>
+          <Botao
+            tipo="botao"
+            onClick={() => {
+              setPagamento(true)
+              setState('success')
+            }}
+          >
+            Finalizar pagamento
+          </Botao>
+          <Botao tipo="botao" onClick={() => setState('delivery')}>
+            Voltar para a edição de endereço
+          </Botao>
+        </S.Sidebar>
+      </S.CheckoutSideContainer>
+      <S.CheckoutSideContainer
+        className={checkout && state === 'success' ? 'success' : ''}
+      >
+        <S.Sidebar>
+          {/* <h3>Pedido realizado - {PurchaseData!.orderId}</h3> */}
+          <p>
+            Estamos felizes em informar que seu pedido já está em processo de
+            preparação e, em breve, será entregue no endereço fornecido.
+          </p>
+          <p>
+            Gostaríamos de ressaltar que nossos entregadores não estão
+            autorizados a realizar cobranças extras.
+          </p>
+          <p>
+            Lembre-se da importância de higienizar as mãos após o recebimento do
+            pedido, garantindo assim sua segurança e bem-estar durante a
+            refeição.
+          </p>
+          <p>
+            Esperamos que desfrute de uma deliciosa e agradável experiência
+            gastronômica. Bom apetite!
+          </p>
+          <Botao
+            tipo="botao"
+            onClick={() => {
+              dispatch(fechar())
+              setState('delivery')
+              dispatch(limpar())
+            }}
+          >
+            Concluir
+          </Botao>
+        </S.Sidebar>
+      </S.CheckoutSideContainer>
+    </form>
   )
 }
 

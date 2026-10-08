@@ -34,6 +34,9 @@ const carrinhoSlice = createSlice({
     abrirCheckout: (state) => {
       state.checkout = true
     },
+    fecharCheckout: (state) => {
+      state.checkout = false
+    },
     fechar: (state) => {
       state.checkout = false
       state.isOpen = false
@@ -49,6 +52,7 @@ export const {
   abrirCheckout,
   adicionar,
   fechar,
+  fecharCheckout,
   remover,
   limpar
 } = carrinhoSlice.actions

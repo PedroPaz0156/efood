@@ -30,6 +30,29 @@ export const SideContainer = styled.div`
   }
 `
 
+export const CheckoutSideContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: flex-end;
+  z-index: 1;
+
+  &.delivery {
+    display: flex;
+  }
+
+  &.payment {
+    display: flex;
+  }
+
+  &.success {
+    display: flex;
+  }
+`
+
 export const Precos = styled.div`
   color: ${Cores.bege};
   padding: 24px 8px 16px;
@@ -42,6 +65,7 @@ export const Precos = styled.div`
 export const Sidebar = styled.aside`
   max-width: 360px;
   width: 100%;
+  color: ${Cores.bege};
   z-index: 1;
   background-color: ${Cores.vermelho};
   padding: 24px 8px 0 8px;
@@ -49,11 +73,19 @@ export const Sidebar = styled.aside`
   ${BotaoAction} {
     max-width: 100%;
     width: 100%;
+    margin-bottom: 16px;
   }
 
   > h3 {
     font-size: 16px;
     font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  > p {
+    font-size: 14px;
+    margin-bottom: 24px;
   }
 `
 
@@ -96,18 +128,41 @@ export const CarrinhoItem = styled.li`
 `
 
 export const InputRow = styled.div`
-  flex: auto;
+  display: block;
 
   label {
     font-size: 14px;
     font-weight: bold;
     color: ${Cores.bege};
-    margin-bottom: 8px;
   }
 
   input {
+    color: ${Cores.preto};
     background-color: ${Cores.bege};
+    border: none;
+    width: 100%;
     height: 32px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+`
+
+export const MicroInputRow = styled.div`
+  justify-content: space-between;
+  display: flex;
+
+  label {
+    font-size: 14px;
+    font-weight: bold;
+    color: ${Cores.bege};
+  }
+
+  input {
+    color: ${Cores.preto};
+    background-color: ${Cores.bege};
+    border: none;
+    height: 32px;
+    margin-top: 8px;
     margin-bottom: 8px;
   }
 `

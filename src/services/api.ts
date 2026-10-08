@@ -36,14 +36,14 @@ type PurchaseResponse = {
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://api-ebac.vercel.app/api/efood/restaurantes'
+    baseUrl: 'https://api-ebac.vercel.app/api/efood'
   }),
   endpoints: (builder) => ({
     getRestaurantes: builder.query<RestauranteInfos[], void>({
-      query: () => ''
+      query: () => '/restaurantes'
     }),
     getCardapio: builder.query<RestauranteInfos, string>({
-      query: (id) => `/${id}`
+      query: (id) => `/restaurantes/${id}`
     }),
     purchase: builder.mutation<PurchaseResponse, DeliveryInfo>({
       query: (body) => ({
