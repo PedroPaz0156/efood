@@ -14,7 +14,6 @@ import { formataPreco, getPrecoTotal } from '../../utils'
 import { limpar, fecharCheckout, fechar } from '../../store/reducers/carrinho'
 
 const Checkout = () => {
-  const [pagamento, setPagamento] = useState(false)
   const [state, setState] = useState('delivery')
   const { checkout } = useSelector((state: RootReducer) => state.carrinho)
   const [purchase, { data: PurchaseData, isSuccess }] = usePurchaseMutation()
@@ -67,27 +66,24 @@ const Checkout = () => {
 
   const form = useFormik({
     initialValues: {
-      products: {
-        id: 1,
-        price: 0
-      },
+      products: [],
       delivery: {
         receiver: '',
         address: {
           description: '',
           city: '',
           zipCode: '',
-          number: 12,
+          number: '',
           complement: ''
         },
         payment: {
           card: {
             name: '',
             number: '',
-            code: 123,
+            code: '',
             expires: {
-              month: 12,
-              year: 1234
+              month: '',
+              year: ''
             }
           }
         }
@@ -96,31 +92,31 @@ const Checkout = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       purchase({
+        products: pratos.map((prato) => ({
+          id: prato.id,
+          price: prato.preco
+        })),
         delivery: {
           address: {
             city: values.delivery.address.city,
             description: values.delivery.address.description,
             zipCode: values.delivery.address.zipCode,
-            number: values.delivery.address.number,
+            number: Number(values.delivery.address.number),
             complement: values.delivery.address.complement
           },
           payment: {
             card: {
               name: values.delivery.payment.card.name,
               number: values.delivery.payment.card.number,
-              code: values.delivery.payment.card.code,
+              code: Number(values.delivery.payment.card.code),
               expires: {
-                month: values.delivery.payment.card.expires.month,
-                year: values.delivery.payment.card.expires.year
+                month: Number(values.delivery.payment.card.expires.month),
+                year: Number(values.delivery.payment.card.expires.year)
               }
             }
           },
           receiver: values.delivery.receiver
-        },
-        products: pratos.map((prato) => ({
-          id: prato.id,
-          price: prato.preco
-        })) as [{ id: number; price: number }]
+        }
       })
     }
   })
@@ -320,7 +316,7 @@ const Checkout = () => {
             <div>
               <label htmlFor="yearExpiration">Ano de vencimento</label>
               <input
-                type="text"
+                type="number"
                 name="delivery.payment.card.expires.year"
                 id="yearExpiration"
                 value={form.values.delivery.payment.card.expires.year}
