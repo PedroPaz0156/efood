@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-type DeliveryInfo = {
+export type DeliveryInfo = {
   products: [
     {
       id: number

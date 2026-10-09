@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { useFormik } from 'formik'
+import { useFormik, getIn } from 'formik'
 import * as Yup from 'yup'
 
 import Botao from '../Botao'
@@ -22,33 +22,43 @@ const Checkout = () => {
   const dispatch = useDispatch()
   const precoTotal = getPrecoTotal(pratos)
 
-  const requiredWhenPaying = <T extends Yup.AnySchema>(schema: T) =>
-    schema.when([], (_values: unknown[], currentSchema: T) =>
-      pagamento
-        ? currentSchema.required('O campo é obrigatório')
-        : currentSchema
-    )
+  const mensagemObrigatoria = 'O campo é obrigatório'
 
   const validationSchema = Yup.object().shape({
     delivery: Yup.object().shape({
       receiver: Yup.string()
         .min(5, 'O nome precisa ter pelo menos 5 caracteres')
-        .required('O campo é obrigatório'),
+        .required(mensagemObrigatoria),
       address: Yup.object().shape({
-        description: requiredWhenPaying(Yup.string()),
-        city: requiredWhenPaying(Yup.string()),
-        zipCode: requiredWhenPaying(Yup.string()),
-        number: requiredWhenPaying(Yup.number()),
-        complement: requiredWhenPaying(Yup.string())
+        description: Yup.string().required(mensagemObrigatoria),
+        city: Yup.string().required(mensagemObrigatoria),
+        zipCode: Yup.string().required(mensagemObrigatoria),
+        number: Yup.number().required(mensagemObrigatoria),
+        complement: Yup.string()
       }),
       payment: Yup.object().shape({
         card: Yup.object().shape({
-          name: requiredWhenPaying(Yup.string()),
-          number: requiredWhenPaying(Yup.string()),
-          code: requiredWhenPaying(Yup.number()),
+          name:
+            state === 'payment'
+              ? Yup.string().required(mensagemObrigatoria)
+              : Yup.string(),
+          number:
+            state === 'payment'
+              ? Yup.string().required(mensagemObrigatoria)
+              : Yup.string(),
+          code:
+            state === 'payment'
+              ? Yup.number().required(mensagemObrigatoria)
+              : Yup.number(),
           expires: Yup.object().shape({
-            month: requiredWhenPaying(Yup.number()),
-            year: requiredWhenPaying(Yup.number())
+            month:
+              state === 'payment'
+                ? Yup.number().required(mensagemObrigatoria)
+                : Yup.number(),
+            year:
+              state === 'payment'
+                ? Yup.number().required(mensagemObrigatoria)
+                : Yup.number()
           })
         })
       })
@@ -115,9 +125,17 @@ const Checkout = () => {
     }
   })
 
+  const mostrarErro = (field: string) => {
+    const error = getIn(form.errors, field)
+    const touched = getIn(form.touched, field)
+
+    return touched && error ? <S.ErrorWarning>{error}</S.ErrorWarning> : null
+  }
+
   useEffect(() => {
     if (isSuccess) {
       dispatch(limpar())
+      setState('success')
     }
   }, [isSuccess, dispatch])
 
@@ -129,74 +147,113 @@ const Checkout = () => {
         <S.Sidebar>
           <h3>Entrega</h3>
           <S.InputRow>
-            <label htmlFor="nome">Quem irá receber</label>
+            <label htmlFor="receiver">Quem irá receber</label>
             <input
               type="text"
-              id="nome"
-              name="nome"
+              id="receiver"
+              name="delivery.receiver"
               value={form.values.delivery.receiver}
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {mostrarErro('delivery.receiver')}
           </S.InputRow>
           <S.InputRow>
-            <label htmlFor="endereco">Endereço</label>
+            <label htmlFor="address">Endereço</label>
             <input
               type="text"
-              id="endereco"
-              name="endereco"
+              id="address"
+              name="delivery.address.description"
               value={form.values.delivery.address.description}
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {mostrarErro('delivery.address.description')}
           </S.InputRow>
           <S.InputRow>
-            <label htmlFor="cidade">Cidade</label>
+            <label htmlFor="city">Cidade</label>
             <input
               type="text"
-              name="cidade"
-              id="cidade"
+              name="delivery.address.city"
+              id="city"
               value={form.values.delivery.address.city}
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {mostrarErro('delivery.address.city')}
           </S.InputRow>
           <S.MicroInputRow>
             <div>
-              <label htmlFor="cep">CEP</label>
+              <label htmlFor="zipCode">CEP</label>
               <input
                 type="text"
-                name="cep"
-                id="cep"
+                name="delivery.address.zipCode"
+                id="zipCode"
                 value={form.values.delivery.address.zipCode}
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
               />
+              {mostrarErro('delivery.address.zipCode')}
             </div>
             <div>
-              <label htmlFor="numero">Número</label>
+              <label htmlFor="number">Número</label>
               <input
                 type="text"
-                name="numero"
-                id="numero"
+                name="delivery.address.number"
+                id="number"
                 value={form.values.delivery.address.number}
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
               />
+              {mostrarErro('delivery.address.number')}
             </div>
           </S.MicroInputRow>
           <S.InputRow>
-            <label htmlFor="complemento">Complemento(Opcional)</label>
+            <label htmlFor="complement">Complemento(Opcional)</label>
             <input
               type="text"
-              name="complemento"
-              id="complemento"
+              name="delivery.address.complement"
+              id="complement"
               value={form.values.delivery.address.complement}
               onChange={form.handleChange}
               onBlur={form.handleBlur}
             />
+            {mostrarErro('delivery.address.complement')}
           </S.InputRow>
-          <Botao tipo={'botao'} onClick={() => setState('payment')}>
+          <Botao
+            tipo={'botao'}
+            onClick={async () => {
+              await Promise.all([
+                form.setFieldTouched('delivery.receiver', true, false),
+                form.setFieldTouched(
+                  'delivery.address.description',
+                  true,
+                  false
+                ),
+                form.setFieldTouched('delivery.address.city', true, false),
+                form.setFieldTouched('delivery.address.zipCode', true, false),
+                form.setFieldTouched('delivery.address.number', true, false)
+              ])
+
+              const errors = await form.validateForm()
+
+              const hasDeliveryErrors = [
+                'delivery.receiver',
+                'delivery.address.description',
+                'delivery.address.city',
+                'delivery.address.zipCode',
+                'delivery.address.number'
+              ].some((field) =>
+                Boolean(
+                  field.split('.').reduce((obj: any, key) => obj?.[key], errors)
+                )
+              )
+
+              if (!hasDeliveryErrors) {
+                setState('payment')
+              }
+            }}
+          >
             Continuar com o pagamento
           </Botao>
           <Botao tipo={'botao'} onClick={() => dispatch(fecharCheckout())}>
@@ -210,58 +267,70 @@ const Checkout = () => {
         <S.Sidebar>
           <h3>Pagamento - valor a pagar {formataPreco(precoTotal)}</h3>
           <S.InputRow>
-            <label htmlFor="nomeCartao">Nome no cartão</label>
-            <input type="text" name="nomeCartao" id="nomeCartao" />
+            <label htmlFor="cardName">Nome no cartão</label>
+            <input
+              type="text"
+              name="delivery.payment.card.name"
+              id="cardName"
+              value={form.values.delivery.payment.card.name}
+              onChange={form.handleChange}
+            />
+            {mostrarErro('delivery.payment.card.name')}
           </S.InputRow>
           <S.MicroInputRow>
             <div>
-              <label htmlFor="numeroCartao">Número do cartão</label>
+              <label htmlFor="cardNumber">Número do cartão</label>
               <input
                 type="text"
-                name="numeroCartao"
-                id="numeroCartao"
+                name="delivery.payment.card.number"
+                id="cardNumber"
+                value={form.values.delivery.payment.card.number}
+                onChange={form.handleChange}
                 style={{ width: '232px' }}
               />
+              {mostrarErro('delivery.payment.card.number')}
             </div>
             <div>
-              <label htmlFor="cvv">CVV</label>
+              <label htmlFor="code">CVV</label>
               <input
                 type="text"
-                name="cvv"
-                id="cvv"
+                name="delivery.payment.card.code"
+                id="code"
+                value={form.values.delivery.payment.card.code}
+                onChange={form.handleChange}
                 style={{ width: '88px' }}
               />
+              {mostrarErro('delivery.payment.card.code')}
             </div>
           </S.MicroInputRow>
           <S.MicroInputRow>
             <div>
-              <label htmlFor="mesVencimento">Mês de vencimento</label>
+              <label htmlFor="monthExpiration">Mês de vencimento</label>
               <input
                 type="text"
-                id="mesVencimento"
-                name="mesVencimento"
+                id="monthExpiration"
+                name="delivery.payment.card.expires.month"
+                value={form.values.delivery.payment.card.expires.month}
+                onChange={form.handleChange}
+                onBlur={form.handleBlur}
                 style={{ width: '156px' }}
               />
+              {mostrarErro('delivery.payment.card.expires.month')}
             </div>
             <div>
-              <label htmlFor="anoVencimento">Ano de vencimento</label>
+              <label htmlFor="yearExpiration">Ano de vencimento</label>
               <input
                 type="text"
-                name="anoVencimento"
-                id="anoVencimento"
+                name="delivery.payment.card.expires.year"
+                id="yearExpiration"
+                value={form.values.delivery.payment.card.expires.year}
+                onChange={form.handleChange}
                 style={{ width: '156px' }}
               />
+              {mostrarErro('delivery.payment.card.expires.year')}
             </div>
           </S.MicroInputRow>
-          <Botao
-            tipo="botao"
-            onClick={() => {
-              setPagamento(true)
-              setState('success')
-            }}
-          >
-            Finalizar pagamento
-          </Botao>
+          <button type="submit">Finalizar pagamento</button>
           <Botao tipo="botao" onClick={() => setState('delivery')}>
             Voltar para a edição de endereço
           </Botao>

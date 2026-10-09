@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DeliveryInfo } from '../../services/api'
 
 type CarrinhoState = {
   pratos: Cardapio[]

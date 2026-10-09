@@ -87,6 +87,20 @@ export const Sidebar = styled.aside`
     font-size: 14px;
     margin-bottom: 24px;
   }
+
+  > button {
+    background-color: ${Cores.bege};
+    color: ${Cores.vermelho};
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+    display: block;
+    cursor: pointer;
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 8px;
+  }
 `
 
 export const CarrinhoItem = styled.li`
@@ -165,4 +179,12 @@ export const MicroInputRow = styled.div`
     margin-top: 8px;
     margin-bottom: 8px;
   }
+`
+
+export const ErrorWarning = styled.span`
+  color: ${Cores.branco};
+  font-size: 12px;
+  margin-bottom: 4px;
+  display: block;
+  font-style: italic;
 `
