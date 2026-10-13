@@ -43,7 +43,9 @@ const Checkout = () => {
               : Yup.string(),
           number:
             state === 'payment'
-              ? Yup.string().required(mensagemObrigatoria)
+              ? Yup.string()
+                  .length(16, 'O número do cartão precisa ter 16 dígitos')
+                  .required(mensagemObrigatoria)
               : Yup.string(),
           code:
             state === 'payment'
@@ -52,11 +54,19 @@ const Checkout = () => {
           expires: Yup.object().shape({
             month:
               state === 'payment'
-                ? Yup.number().required(mensagemObrigatoria)
+                ? Yup.number()
+                    .min(1, 'O mês precisa ser válido')
+                    .max(12, 'O mês precisa ser válido')
+                    .required(mensagemObrigatoria)
                 : Yup.number(),
             year:
               state === 'payment'
-                ? Yup.number().required(mensagemObrigatoria)
+                ? Yup.number()
+                    .min(
+                      new Date().getFullYear(),
+                      'O ano precisa ser maior ou igual ao ano atual'
+                    )
+                    .required(mensagemObrigatoria)
                 : Yup.number()
           })
         })
@@ -75,16 +85,16 @@ const Checkout = () => {
           zipCode: '',
           number: '',
           complement: ''
-        },
-        payment: {
-          card: {
-            name: '',
-            number: '',
-            code: '',
-            expires: {
-              month: '',
-              year: ''
-            }
+        }
+      },
+      payment: {
+        card: {
+          name: '',
+          number: '',
+          code: '',
+          expires: {
+            month: '',
+            year: ''
           }
         }
       }
@@ -104,18 +114,18 @@ const Checkout = () => {
             number: Number(values.delivery.address.number),
             complement: values.delivery.address.complement
           },
-          payment: {
-            card: {
-              name: values.delivery.payment.card.name,
-              number: values.delivery.payment.card.number,
-              code: Number(values.delivery.payment.card.code),
-              expires: {
-                month: Number(values.delivery.payment.card.expires.month),
-                year: Number(values.delivery.payment.card.expires.year)
-              }
-            }
-          },
           receiver: values.delivery.receiver
+        },
+        payment: {
+          card: {
+            name: values.payment.card.name,
+            number: values.payment.card.number,
+            code: Number(values.payment.card.code),
+            expires: {
+              month: Number(values.payment.card.expires.month),
+              year: Number(values.payment.card.expires.year)
+            }
+          }
         }
       })
     }
@@ -266,37 +276,37 @@ const Checkout = () => {
             <label htmlFor="cardName">Nome no cartão</label>
             <input
               type="text"
-              name="delivery.payment.card.name"
+              name="payment.card.name"
               id="cardName"
-              value={form.values.delivery.payment.card.name}
+              value={form.values.payment.card.name}
               onChange={form.handleChange}
             />
-            {mostrarErro('delivery.payment.card.name')}
+            {mostrarErro('payment.card.name')}
           </S.InputRow>
           <S.MicroInputRow>
             <div>
               <label htmlFor="cardNumber">Número do cartão</label>
               <input
                 type="text"
-                name="delivery.payment.card.number"
+                name="payment.card.number"
                 id="cardNumber"
-                value={form.values.delivery.payment.card.number}
+                value={form.values.payment.card.number}
                 onChange={form.handleChange}
                 style={{ width: '232px' }}
               />
-              {mostrarErro('delivery.payment.card.number')}
+              {mostrarErro('payment.card.number')}
             </div>
             <div>
               <label htmlFor="code">CVV</label>
               <input
                 type="text"
-                name="delivery.payment.card.code"
+                name="payment.card.code"
                 id="code"
-                value={form.values.delivery.payment.card.code}
+                value={form.values.payment.card.code}
                 onChange={form.handleChange}
                 style={{ width: '88px' }}
               />
-              {mostrarErro('delivery.payment.card.code')}
+              {mostrarErro('payment.card.code')}
             </div>
           </S.MicroInputRow>
           <S.MicroInputRow>
@@ -305,28 +315,38 @@ const Checkout = () => {
               <input
                 type="text"
                 id="monthExpiration"
-                name="delivery.payment.card.expires.month"
-                value={form.values.delivery.payment.card.expires.month}
+                name="payment.card.expires.month"
+                value={form.values.payment.card.expires.month}
                 onChange={form.handleChange}
                 onBlur={form.handleBlur}
                 style={{ width: '156px' }}
               />
-              {mostrarErro('delivery.payment.card.expires.month')}
+              {mostrarErro('payment.card.expires.month')}
             </div>
             <div>
               <label htmlFor="yearExpiration">Ano de vencimento</label>
               <input
                 type="number"
-                name="delivery.payment.card.expires.year"
+                name="payment.card.expires.year"
                 id="yearExpiration"
-                value={form.values.delivery.payment.card.expires.year}
+                value={form.values.payment.card.expires.year}
                 onChange={form.handleChange}
                 style={{ width: '156px' }}
               />
-              {mostrarErro('delivery.payment.card.expires.year')}
+              {mostrarErro('payment.card.expires.year')}
             </div>
           </S.MicroInputRow>
-          <button type="submit">Finalizar pagamento</button>
+          <button
+            type="button"
+            onClick={() => {
+              form.handleSubmit()
+              if (form.isValid) {
+                setState('success')
+              }
+            }}
+          >
+            Finalizar pagamento
+          </button>
           <Botao tipo="botao" onClick={() => setState('delivery')}>
             Voltar para a edição de endereço
           </Botao>
@@ -336,7 +356,7 @@ const Checkout = () => {
         className={checkout && state === 'success' ? 'success' : ''}
       >
         <S.Sidebar>
-          {/* <h3>Pedido realizado - {PurchaseData!.orderId}</h3> */}
+          <h3>Pedido realizado - {PurchaseData?.orderId}</h3>
           <p>
             Estamos felizes em informar que seu pedido já está em processo de
             preparação e, em breve, será entregue no endereço fornecido.
@@ -360,6 +380,7 @@ const Checkout = () => {
               dispatch(fechar())
               setState('delivery')
               dispatch(limpar())
+              form.resetForm()
             }}
           >
             Concluir

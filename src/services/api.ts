@@ -14,15 +14,15 @@ export type DeliveryInfo = {
       number: number
       complement: string
     }
-    payment: {
-      card: {
-        name: string
-        number: string
-        code: number
-        expires: {
-          month: number
-          year: number
-        }
+  }
+  payment: {
+    card: {
+      name: string
+      number: string
+      code: number
+      expires: {
+        month: number
+        year: number
       }
     }
   }
